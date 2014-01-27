@@ -1,4 +1,4 @@
-```hs
+```
 GHCi, version 7.6.3: http://www.haskell.org/ghc/  :? for help
 Loading package ghc-prim ... linking ... done.
 Loading package integer-gmp ... linking ... done.
