@@ -2,7 +2,7 @@ import Test
 import System.Exit
 
 
-mainTests = exampleFailingTests
+mainTests = []
 
 
 main = handle $ runTests mainTests

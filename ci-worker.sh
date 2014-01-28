@@ -27,5 +27,4 @@ else
     echo -e $green
     figlet -w150 -f $figletfont PASS
     echo -e $black
-    echo "$output"
 fi
