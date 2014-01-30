@@ -11,7 +11,7 @@ clear
 compile_output=`ghc Main.hs 2>&1`
 if [ $? -ne 0 ]; then
     echo -e $red
-    figlet -w150 -f $figletfont ERROR
+    figlet -w150 ERROR
     echo -e $black
     echo -e "$compile_output"
     exit 1
@@ -20,11 +20,11 @@ fi
 output=`./Main`
 if [ $? -ne 0 ]; then
     echo -e $yellow
-    figlet -w150 -f $figletfont FAIL
+    figlet -w150 FAIL
     echo -e $black
     echo "$output"
 else
     echo -e $green
-    figlet -w150 -f $figletfont PASS
+    figlet -w150 PASS
     echo -e $black
 fi
