@@ -1,8 +1,8 @@
 import Test
+import GildedRoseTest
 import System.Exit
 
-
-mainTests = []
+mainTests = gildedRoseTest
 
 
 main = handle $ runTests mainTests
