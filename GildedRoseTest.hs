@@ -19,6 +19,8 @@ sellInReachedQualityDegradesFaster = Test (quality (updateItem sellInReachedItem
 -- Step 2 "The Quality of an item is never negative"
 fullyDegradedItem = Item "testItem" 2 0
 fullyDegraded = Test (quality (updateItem fullyDegradedItem) == 0) "The quality of an item does not go below 0"
+almostDegradedAndReachedSellInItem = Item "testItem" 0 1
+almostDegradedAndReachedSellIn = Test (quality (updateItem almostDegradedAndReachedSellInItem) == 0) "An almost degraded item that already needed to be sold does not go to negative quality"
 
 -- Step 3 "'Aged Brie' actually increases in Quality the older it gets"
 agedBrie = Item "AgedBrie" 3 3
@@ -30,6 +32,11 @@ agedBrieReachedSellInQualityIncreases = Test (quality (updateItem agedBrieReache
 veryAgedBrie = Item "AgedBrie" 1 50
 veryAgedBrieDoesNotIncreaseQuality = Test (quality (updateItem veryAgedBrie) == 50) "The quality of AgedBrie does not exceed 50"
 
+-- Step 5 "'Sulfuras', being a legendary item, never has to be sold or decreases in Quality"
+sulfuras = Item "Sulfuras" 1 1
+sulfurasDontExpire = Test (sellIn (updateItem sulfuras) == 1) "Sulfuras do not expire"
+sulfurasDontDegrade = Test (quality (updateItem sulfuras) == 1) "Sulfuras do not degrade"
+
 
 gildedRoseTest = [qualityDecreasesByOne,
 				  sellInDecreasesByOne,
@@ -37,7 +44,10 @@ gildedRoseTest = [qualityDecreasesByOne,
 				  sellInReachedAndFullyDegraded,
 				  sellInReachedQualityDegradesFaster,
 				  fullyDegraded,
+                  almostDegradedAndReachedSellIn,
 				  agedBrieQualityIncreases,
                   agedBrieReachedSellInQualityIncreases,
-                  veryAgedBrieDoesNotIncreaseQuality]
+                  veryAgedBrieDoesNotIncreaseQuality,
+                  sulfurasDontExpire,
+                  sulfurasDontDegrade]
 
