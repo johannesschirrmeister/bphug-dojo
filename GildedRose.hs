@@ -19,6 +19,6 @@ updateItem i@Item{name, sellIn, quality}
 
 updateQuality :: Item -> Int
 updateQuality i@Item{name, sellIn, quality} 
-    | name == "AgedBrie" = quality + 1
+    | name == "AgedBrie" = if quality < 50 then quality + 1 else 50
     | sellIn == 0 = quality - 2
     | otherwise = quality - 1
