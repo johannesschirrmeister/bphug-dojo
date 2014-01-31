@@ -2,29 +2,52 @@
 
 module GildedRose where
 
-data Item = Item { name :: String, sellIn :: Int, quality :: Int }
-type Inventory = [Item]
+class Item i where
+    updateQuality :: i -> Int
+    updateSellIn :: i -> Int
+    updateItem :: i -> i
 
-processOneDay :: Inventory -> Inventory
-processOneDay inventory = map updateItem inventory
+data StandardItem = StandardItem { std_sellIn :: Int, std_quality :: Int }
+data AgedBrie = AgedBrie { ab_sellIn :: Int, ab_quality :: Int }
+data Sulfuras = Sulfuras { su_sellIn :: Int, su_quality :: Int }
+data BackstagePasses = BackstagePasses { bp_sellIn :: Int, bp_quality :: Int }
 
-updateItem :: Item -> Item
-updateItem i@Item{name, sellIn, quality} 
-    | stillValid && notDegraded = Item name (updateSellIn i) (updateQuality i)
-    | stillValid = Item name (updateSellIn i) 0
-    | notDegraded = Item name 0 (updateQuality i)
-    | otherwise = Item name 0 0
-    where stillValid = sellIn > 0
-          notDegraded = quality > 0
+instance Item StandardItem where
+    updateQuality s@StandardItem{std_sellIn, std_quality}  = if std_sellIn <= 0 then std_quality - 2 else std_quality - 1
+    updateSellIn s@StandardItem{std_sellIn, std_quality} = std_sellIn - 1
+    updateItem s@StandardItem{std_sellIn, std_quality} = StandardItem (us $ updateSellIn s) (uq $ updateQuality s)
 
-updateQuality :: Item -> Int
-updateQuality i@Item{name, sellIn, quality} 
-    | name == "AgedBrie" = if quality < 50 then quality + 1 else 50
-    | name == "Sulfuras" = quality
-    | sellIn == 0 = if quality > 1 then quality - 2 else 0
-    | otherwise = quality - 1
+instance Item AgedBrie where
+    updateQuality a@AgedBrie{ab_sellIn, ab_quality} = ab_quality + 1
+    updateSellIn a@AgedBrie{ab_sellIn, ab_quality} = ab_sellIn - 1
+    updateItem a@AgedBrie{ab_sellIn, ab_quality} = AgedBrie (us $ updateSellIn a) (uq $ updateQuality a)
 
-updateSellIn :: Item -> Int
-updateSellIn i@Item{name, sellIn, quality}
-    | name == "Sulfuras" = sellIn
-    | otherwise = sellIn - 1
+instance Item Sulfuras where
+    updateQuality s@Sulfuras{su_sellIn, su_quality} = su_quality
+    updateSellIn s@Sulfuras{su_sellIn, su_quality} = su_sellIn
+    updateItem su@Sulfuras{su_sellIn, su_quality} = Sulfuras (us $ updateSellIn su) (uq $ updateQuality su)
+
+instance Item BackstagePasses where
+    updateQuality b@BackstagePasses{bp_sellIn, bp_quality}
+        | bp_sellIn > 10 = bp_quality + 1
+        | bp_sellIn > 5 && bp_sellIn <= 10 = bp_quality + 2
+        | bp_sellIn > 0 && bp_sellIn <= 5 = bp_quality + 3
+        | bp_sellIn <= 0 = 0
+    updateSellIn b@BackstagePasses{bp_sellIn, bp_quality} = bp_sellIn - 1
+    updateItem b@BackstagePasses{bp_sellIn, bp_quality} = BackstagePasses newSellIn newQuality where
+        newSellIn = us $ updateSellIn b
+        newQuality = uq $ updateQuality (BackstagePasses newSellIn bp_quality)
+
+us :: Int -> Int
+us sellIn = if sellIn <= 0 then 0 else sellIn
+
+uq :: Int -> Int
+uq quality
+    | quality > 50 = 50
+    | quality <= 0 = 0
+    | otherwise = quality
+
+
+--type Inventory a = [Item a]
+--processOneDay :: Inventory a -> Inventory a
+--processOneDay inventory = map updateItem inventory
