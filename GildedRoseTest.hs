@@ -8,7 +8,7 @@ import Test
 -- Base case
 standardItem = StandardItem 5 5
 sellInReachedItem = StandardItem 0 5
-fullyDegradedsellInReachedItem = StandardItem 0 0
+fullyDegradedItem = StandardItem 0 0
 
 qualityDecreasesByOne = Test (std_sellIn (updateItem standardItem) == 4) "An item that needs to be sold in 5 days, needs to be sold in 4 days tomorrow"
 sellInDecreasesByOne = Test (std_quality (updateItem standardItem) == 4) "An item with quality 5 will have quality 4 tomorrow"
@@ -19,8 +19,8 @@ sellInReachedAndFullyDegraded = Test (std_sellIn (updateItem sellInReachedItem) 
 sellInReachedQualityDegradesFaster = Test (std_quality (updateItem sellInReachedItem) == 3) "The quality of an item that already perished degrades twice as fast"
 
 -- Step 2 "The Quality of an item is never negative"
-fullyDegradedItem = StandardItem 2 0
-fullyDegraded = Test (std_quality (updateItem fullyDegradedItem) == 0) "The quality of an item does not go below 0"
+fullyDegradedsellInReachedItem = StandardItem 2 0
+fullyDegraded = Test (std_quality (updateItem fullyDegradedsellInReachedItem) == 0) "The quality of an item does not go below 0"
 
 almostDegradedAndReachedSellInItem = StandardItem 0 1
 almostDegradedAndReachedSellIn = Test (std_quality (updateItem almostDegradedAndReachedSellInItem) == 0) "An almost degraded item that already needed to be sold does not go to negative quality"
@@ -53,13 +53,13 @@ backStagePass5DaysBefore = Test (bp_quality (updateItem backStagePass5Days) == 4
 backStagePassDegradesAfterConcert = Test (bp_quality (updateItem backStagePassAfterConcert) == 0) "Backstage passes lose quality immediately after the concert"
 
 gildedRoseTest = [qualityDecreasesByOne,
-				  sellInDecreasesByOne,
-				  sellInReachedSellInRemainsZero,
-				  sellInReachedAndFullyDegraded,
-				  sellInReachedQualityDegradesFaster,
-				  fullyDegraded,
+			sellInDecreasesByOne,
+			sellInReachedSellInRemainsZero,
+			sellInReachedAndFullyDegraded,
+			sellInReachedQualityDegradesFaster,
+			fullyDegraded,
                   almostDegradedAndReachedSellIn,
-				  agedBrieQualityIncreases,
+			agedBrieQualityIncreases,
                   agedBrieReachedSellInQualityIncreases,
                   veryAgedBrieDoesNotIncreaseQuality,
                   sulfurasDontExpire,

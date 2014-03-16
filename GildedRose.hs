@@ -46,8 +46,3 @@ uq quality
     | quality > 50 = 50
     | quality <= 0 = 0
     | otherwise = quality
-
-
---type Inventory a = [Item a]
---processOneDay :: Inventory a -> Inventory a
---processOneDay inventory = map updateItem inventory
